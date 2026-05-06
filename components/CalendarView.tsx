@@ -24,14 +24,23 @@ export default function CalendarView({
     const totalDays = lastDay.getDate();
     const startDay = firstDay.getDay();
 
-    const todayString = today.toISOString().split("T")[0];
+    // IMPORTANT: Local date formatter, do not use toISOString()
+    const formatLocalDate = (date: Date) => {
+        const y = date.getFullYear();
+        const m = String(date.getMonth() + 1).padStart(2, "0");
+        const d = String(date.getDate()).padStart(2, "0");
+
+        return `${y}-${m}-${d}`;
+    };
+
+    const todayString = formatLocalDate(today);
 
     const taskLogs = logs.filter(
         (log) => log.taskId === taskId && log.isCompleted
     );
 
     const formatDate = (day: number) => {
-        return new Date(year, month, day).toISOString().split("T")[0];
+        return formatLocalDate(new Date(year, month, day));
     };
 
     const days: (number | null)[] = [];
